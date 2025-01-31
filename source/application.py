@@ -53,4 +53,4 @@ class Application:
 
         emulator.initialize_memory()
         emulator.import_code(instruction_tuples)
-        # emulator.run()
+        emulator.run()
