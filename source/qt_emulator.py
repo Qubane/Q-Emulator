@@ -104,8 +104,212 @@ class QTEmulator:
     def _i000_nop(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
-        NOP - No Operation
+        nop - No Operation
         """
 
         # Do nothing
         pass
+
+    def _i000_load(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+        load - Loads VAL into ACC
+        """
+
+    def _i001_load(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i002_store(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i003_loadp(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i004_loadpr(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i005_storep(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i006_push(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i007_pop(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i008_call(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i009_return(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i010_jump(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i011_jumpc(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i012_clf(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i016_and(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i017_or(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i018_xor(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i019_lsl(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i020_lsr(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i021_rol(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i022_ror(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i023_comp(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i032_add(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i033_sub(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i034_addc(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i035_subc(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i036_inc(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i037_dec(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i038_mul(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i039_div(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i040_mod(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i096_portw(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i097_portr(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i126_interrupt(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
+
+    def _i127_halt(self, flag: uint8, value: uint16):
+        """
+        INSTRUCTION CALL
+
+        """
