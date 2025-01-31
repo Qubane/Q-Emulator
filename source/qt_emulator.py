@@ -254,6 +254,8 @@ class QTEmulator:
         lsr - Logical Shift Right - Shifts ACC right VAL times
         """
 
+        self.accumulator = self.accumulator >> value
+
     def _i021_rol(self, value: uint16):
         """
         INSTRUCTION CALL
