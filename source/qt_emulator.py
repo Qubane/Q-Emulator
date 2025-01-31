@@ -246,6 +246,8 @@ class QTEmulator:
         lsl - Logical Shift Left - Shifts ACC left VAL times
         """
 
+        self.accumulator = self.accumulator << value
+
     def _i020_lsr(self, value: uint16):
         """
         INSTRUCTION CALL
