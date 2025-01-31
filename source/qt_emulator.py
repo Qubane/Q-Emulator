@@ -110,12 +110,6 @@ class QTEmulator:
         # Do nothing
         pass
 
-    def _i000_load(self, flag: uint8, value: uint16):
-        """
-        INSTRUCTION CALL
-        load - Loads VAL into ACC
-        """
-
     def _i001_load(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
