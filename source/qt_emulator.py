@@ -192,7 +192,7 @@ class QTEmulator:
         """
 
         self.address_stack_pointer -= 1
-        self.program_counter = self.address_stack[self.address_stack_pointer] - 1
+        self.program_counter = self.address_stack[self.address_stack_pointer]
 
     def _i010_jump(self, value: uint16):
         """
