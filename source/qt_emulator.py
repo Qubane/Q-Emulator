@@ -58,4 +58,6 @@ class QTEmulator:
         """
 
         while True:
-            flag = self.rom[self.program_counter]
+            flag = self.rom[self.program_counter] >> 23
+            value = (self.rom[self.program_counter] >> 7) & 65535
+            opcode = self.rom[self.program_counter] & 127
