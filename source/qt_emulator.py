@@ -299,8 +299,12 @@ class QTEmulator:
     def _i126_interrupt(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
+        Exit code: 201
         interrupt - Interrupt - Interrupts execution
         """
+
+        self.running = False
+        self.exit_code = 201
 
     def _i127_halt(self, flag: uint8, value: uint16):
         """
