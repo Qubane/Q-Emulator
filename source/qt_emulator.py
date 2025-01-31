@@ -153,6 +153,8 @@ class QTEmulator:
         storep - Store Pointer - Store ACC into address defined by PR
         """
 
+        self.cache[self.pointer_register] = self.accumulator
+
     def _i006_push(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
