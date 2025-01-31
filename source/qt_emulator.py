@@ -337,6 +337,8 @@ class QTEmulator:
         mul - Multiply - Multiply ACC with VAL
         """
 
+        self.accumulator = uint16(self.accumulator * value)
+
     def _i039_div(self, value: uint16):
         """
         INSTRUCTION CALL
