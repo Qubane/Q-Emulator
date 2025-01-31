@@ -345,6 +345,8 @@ class QTEmulator:
         div - Divide - Divide ACC by VAL
         """
 
+        self.accumulator = self.accumulator // value
+
     def _i040_mod(self, value: uint16):
         """
         INSTRUCTION CALL
