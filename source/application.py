@@ -4,6 +4,8 @@ The main application class that is executed
 
 
 from argparse import ArgumentParser, Namespace
+from source.file_io import load
+from source.qt_emulator import QTEmulator
 
 
 class Application:
@@ -37,3 +39,18 @@ class Application:
 
         # parse args
         self.parse_args()
+
+        # load instructions
+        instruction_tuples = load(self.args.input)
+
+        # define emulator
+        if self.args.namespace == "QT":
+            emulator = QTEmulator()
+        elif self.args.namespace == "QM":
+            raise NotImplementedError
+        else:
+            raise Exception
+
+        emulator.initialize_memory()
+        emulator.import_code(instruction_tuples)
+        # emulator.run()
