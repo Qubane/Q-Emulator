@@ -353,6 +353,8 @@ class QTEmulator:
         mod - Modulo - Remainder of division of ACC by VAL
         """
 
+        self.accumulator = self.accumulator % value
+
     def _i096_portw(self, value: uint16):
         """
         INSTRUCTION CALL
