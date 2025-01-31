@@ -94,7 +94,7 @@ class QTEmulator:
                 value = self.cache[value]
 
             # call instruction
-            self._instruction_lookup[opcode](flag, value)
+            self._instruction_lookup[opcode](value)
 
             # increment counter
             self.program_counter += 1
