@@ -305,5 +305,9 @@ class QTEmulator:
     def _i127_halt(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
+        Exit code: 100
         halt - Halt - Halts execution
         """
+
+        self.running = False
+        self.exit_code = 200
