@@ -14,6 +14,9 @@ class QTEmulator:
 
     ADDRESS_BIT_WIDTH = 16
 
+    VALUE_BIT_WIDTH = ADDRESS_BIT_WIDTH
+    OPCODE_BIT_WIDTH = 7
+
     def __init__(self):
         # program memory
         self.rom: list[uint32] = list()
@@ -35,13 +38,20 @@ class QTEmulator:
 
         # instruction lookup table
         self._instruction_lookup: list[Callable] | None = None
+        self._make_instruction_lookup()
 
     def _make_instruction_lookup(self):
         """
         Generate internal instruction lookup table
         """
 
-        self._instruction_lookup = []
+        self._instruction_lookup = [self._unknown_instruction_halt for _ in range(2**self.OPCODE_BIT_WIDTH)]
+        for field in self.__dir__():
+            attr = getattr(self, field)
+            if not attr.__doc__:
+                continue
+            if attr.__doc__.find("INSTRUCTION CALL") > -1:
+                self._instruction_lookup[int(field[2:5])] = attr
 
     def _unknown_instruction_halt(self):
         """
@@ -86,3 +96,12 @@ class QTEmulator:
             flag = self.rom[self.program_counter] >> 23
             value = (self.rom[self.program_counter] >> 7) & 65535
             opcode = self.rom[self.program_counter] & 127
+
+    def _i000_nop(self):
+        """
+        INSTRUCTION CALL
+        NOP - No Operation
+        """
+
+        # Do nothing
+        pass
