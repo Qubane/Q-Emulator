@@ -230,6 +230,8 @@ class QTEmulator:
         or - Or - Bitwise OR with ACC and VAL
         """
 
+        self.accumulator = self.accumulator | value
+
     def _i018_xor(self, value: uint16):
         """
         INSTRUCTION CALL
