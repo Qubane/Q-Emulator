@@ -28,6 +28,7 @@ class QTEmulator:
 
         # register memory (registers)
         self.accumulator: uint16 = uint16(0)
+        self.pointer_register: uint16 = uint16(0)
         self.program_counter: uint16 = uint16(0)
         self.stack_counter: uint16 = uint16(0)
         self.address_stack_counter: uint16 = uint16(0)
@@ -140,6 +141,11 @@ class QTEmulator:
         INSTRUCTION CALL
         loadpr - Load Pointer Register - Load VAL into PR
         """
+
+        if flag:
+            self.pointer_register = self.cache[value]
+        else:
+            self.pointer_register = value
 
     def _i005_storep(self, flag: uint8, value: uint16):
         """
