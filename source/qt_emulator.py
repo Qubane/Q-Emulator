@@ -262,6 +262,9 @@ class QTEmulator:
         rol - Rotate Left - Rotates ACC left VAL times
         """
 
+        carry = self.accumulator >> (self.VALUE_BIT_WIDTH - 1)
+        self.accumulator = (self.accumulator << value) + carry
+
     def _i022_ror(self, value: uint16):
         """
         INSTRUCTION CALL
