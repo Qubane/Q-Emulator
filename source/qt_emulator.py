@@ -116,6 +116,11 @@ class QTEmulator:
         load - Load - Loads VAL into ACC
         """
 
+        if flag:
+            self.accumulator = self.cache[value]
+        else:
+            self.accumulator = value
+
     def _i002_store(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
