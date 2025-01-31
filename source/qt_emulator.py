@@ -3,6 +3,7 @@ QT Architecture emulator
 """
 
 
+from typing import Callable
 from numpy import uint8, uint16, uint32, zeros, ndarray
 
 
@@ -27,6 +28,16 @@ class QTEmulator:
         self.program_counter: uint16 = uint16(0)
         self.stack_counter: uint16 = uint16(0)
         self.address_stack_counter: uint16 = uint16(0)
+
+        # instruction lookup table
+        self._instruction_lookup: list[Callable] | None = None
+
+    def _make_instruction_lookup(self):
+        """
+        Generate internal instruction lookup table
+        """
+
+        self._instruction_lookup = []
 
     def initialize_memory(self):
         """
@@ -61,3 +72,5 @@ class QTEmulator:
             flag = self.rom[self.program_counter] >> 23
             value = (self.rom[self.program_counter] >> 7) & 65535
             opcode = self.rom[self.program_counter] & 127
+
+
