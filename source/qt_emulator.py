@@ -51,3 +51,8 @@ class QTEmulator:
 
             # M VVVV`VVVV`VVVV`VVVV OOO`OOOO
             self.rom[idx] = c_uint32((memory_flag.value << 23) + (value.value << 7) + opcode.value)
+
+    def run(self):
+        """
+        Executes imported code
+        """
