@@ -301,6 +301,8 @@ class QTEmulator:
         sub - Add - Subtract VAL from ACC
         """
 
+        self.accumulator = self.accumulator - value
+
     def _i034_addc(self, value: uint16):
         """
         INSTRUCTION CALL
