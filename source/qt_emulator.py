@@ -89,8 +89,14 @@ class QTEmulator:
             value = uint16((self.rom[self.program_counter] >> 7))
             opcode = uint8(self.rom[self.program_counter] & 127)
 
+            # if memory flag -> use cache value
+            if flag:
+                value = self.cache[value]
+
+            # call instruction
             self._instruction_lookup[opcode](flag, value)
 
+            # increment counter
             self.program_counter += 1
 
     def _unknown_instruction_halt(self, *args):
@@ -102,7 +108,7 @@ class QTEmulator:
         self.running = False
         self.exit_code = 400
 
-    def _i000_nop(self, flag: uint8, value: uint16):
+    def _i000_nop(self, value: uint16):
         """
         INSTRUCTION CALL
         nop - No Operation
@@ -111,18 +117,15 @@ class QTEmulator:
         # Do nothing
         pass
 
-    def _i001_load(self, flag: uint8, value: uint16):
+    def _i001_load(self, value: uint16):
         """
         INSTRUCTION CALL
         load - Load - Loads VAL into ACC
         """
 
-        if flag:
-            self.accumulator = self.cache[value]
-        else:
-            self.accumulator = value
+        self.accumulator = value
 
-    def _i002_store(self, flag: uint8, value: uint16):
+    def _i002_store(self, value: uint16):
         """
         INSTRUCTION CALL
         store - Store - Stores ACC into address defined by VAL
@@ -130,24 +133,21 @@ class QTEmulator:
 
         self.cache[value] = self.accumulator
 
-    def _i003_loadp(self, flag: uint8, value: uint16):
+    def _i003_loadp(self, value: uint16):
         """
         INSTRUCTION CALL
         loadp - Load Pointer - Loads value from cache using ACC as address
         """
 
-    def _i004_loadpr(self, flag: uint8, value: uint16):
+    def _i004_loadpr(self, value: uint16):
         """
         INSTRUCTION CALL
         loadpr - Load Pointer Register - Load VAL into PR
         """
 
-        if flag:
-            self.pointer_register = self.cache[value]
-        else:
-            self.pointer_register = value
+        self.pointer_register = value
 
-    def _i005_storep(self, flag: uint8, value: uint16):
+    def _i005_storep(self, value: uint16):
         """
         INSTRUCTION CALL
         storep - Store Pointer - Store ACC into address defined by PR
@@ -155,7 +155,7 @@ class QTEmulator:
 
         self.cache[self.pointer_register] = self.accumulator
 
-    def _i006_push(self, flag: uint8, value: uint16):
+    def _i006_push(self, value: uint16):
         """
         INSTRUCTION CALL
         push - Push - Push ACC onto number stack
@@ -164,7 +164,7 @@ class QTEmulator:
         self.stack[self.stack_pointer] = self.accumulator
         self.stack_pointer += 1
 
-    def _i007_pop(self, flag: uint8, value: uint16):
+    def _i007_pop(self, value: uint16):
         """
         INSTRUCTION CALL
         pop - Pop - Pop ACC from number stack
@@ -173,7 +173,7 @@ class QTEmulator:
         self.stack_pointer -= 1
         self.accumulator = self.stack[self.stack_pointer]
 
-    def _i008_call(self, flag: uint8, value: uint16):
+    def _i008_call(self, value: uint16):
         """
         INSTRUCTION CALL
         call - Call - Pushes current IR into stack; jumps to VAL
@@ -181,13 +181,9 @@ class QTEmulator:
 
         self.address_stack[self.address_stack_pointer] = self.program_counter
         self.address_stack_pointer += 1
+        self.program_counter = value
 
-        if flag:
-            self.program_counter = self.cache[value]
-        else:
-            self.program_counter = value
-
-    def _i009_return(self, flag: uint8, value: uint16):
+    def _i009_return(self, value: uint16):
         """
         INSTRUCTION CALL
         return - Return - Pops value from stack to IR
@@ -196,18 +192,15 @@ class QTEmulator:
         self.address_stack_pointer -= 1
         self.program_counter = self.address_stack[self.address_stack_pointer]
 
-    def _i010_jump(self, flag: uint8, value: uint16):
+    def _i010_jump(self, value: uint16):
         """
         INSTRUCTION CALL
         jump - Jump - Unconditional jump to VAL
         """
 
-        if flag:
-            self.program_counter = self.cache[value]
-        else:
-            self.program_counter = value
+        self.program_counter = value
 
-    def _i011_jumpc(self, flag: uint8, value: uint16):
+    def _i011_jumpc(self, value: uint16):
         """
         INSTRUCTION CALL
         jumpc - Jump Condition - Conditional jump to PR; Condition defined by bitmask
@@ -215,137 +208,131 @@ class QTEmulator:
 
         # TODO: conditions
 
-        if flag:
-            self.program_counter = self.cache[self.pointer_register]
-        else:
-            self.program_counter = self.pointer_register
+        self.program_counter = self.pointer_register
 
-    def _i012_clf(self, flag: uint8, value: uint16):
+    def _i012_clf(self, value: uint16):
         """
         INSTRUCTION CALL
         clf - Clear Flag - Clears flags; Flags are defined by bitmask
         """
 
-    def _i016_and(self, flag: uint8, value: uint16):
+    def _i016_and(self, value: uint16):
         """
         INSTRUCTION CALL
         and - And - Bitwise AND with ACC and VAL
         """
 
-        if flag:
-            self.accumulator = self.accumulator & self.cache[value]
-        else:
-            self.accumulator = self.accumulator & value
+        self.accumulator = self.accumulator & value
 
-    def _i017_or(self, flag: uint8, value: uint16):
+    def _i017_or(self, value: uint16):
         """
         INSTRUCTION CALL
         or - Or - Bitwise OR with ACC and VAL
         """
 
-    def _i018_xor(self, flag: uint8, value: uint16):
+    def _i018_xor(self, value: uint16):
         """
         INSTRUCTION CALL
         xor - Xor - Bitwise XOR with ACC and VAL
         """
 
-    def _i019_lsl(self, flag: uint8, value: uint16):
+    def _i019_lsl(self, value: uint16):
         """
         INSTRUCTION CALL
         lsl - Logical Shift Left - Shifts ACC left VAL times
         """
 
-    def _i020_lsr(self, flag: uint8, value: uint16):
+    def _i020_lsr(self, value: uint16):
         """
         INSTRUCTION CALL
         lsr - Logical Shift Right - Shifts ACC right VAL times
         """
 
-    def _i021_rol(self, flag: uint8, value: uint16):
+    def _i021_rol(self, value: uint16):
         """
         INSTRUCTION CALL
         rol - Rotate Left - Rotates ACC left VAL times
         """
 
-    def _i022_ror(self, flag: uint8, value: uint16):
+    def _i022_ror(self, value: uint16):
         """
         INSTRUCTION CALL
         ror - Rotate Right - Rotates ACC right VAL times
         """
 
-    def _i023_comp(self, flag: uint8, value: uint16):
+    def _i023_comp(self, value: uint16):
         """
         INSTRUCTION CALL
         comp - Compare - Compares ACC and VAL, -1 if ACC < VAL; 0 if ACC == VAL; 1 if ACC > VAL
         """
 
-    def _i032_add(self, flag: uint8, value: uint16):
+    def _i032_add(self, value: uint16):
         """
         INSTRUCTION CALL
         add - Add - Add ACC and VAL
         """
 
-    def _i033_sub(self, flag: uint8, value: uint16):
+    def _i033_sub(self, value: uint16):
         """
         INSTRUCTION CALL
         sub - Add - Subtract VAL from ACC
         """
 
-    def _i034_addc(self, flag: uint8, value: uint16):
+    def _i034_addc(self, value: uint16):
         """
         INSTRUCTION CALL
         addc - Add Carry - Add ACC and VAL, with carry
         """
 
-    def _i035_subc(self, flag: uint8, value: uint16):
+    def _i035_subc(self, value: uint16):
         """
         INSTRUCTION CALL
         subc - Sub Carry - Subtract VAL from ACC, with carry
         """
 
-    def _i036_inc(self, flag: uint8, value: uint16):
+    def _i036_inc(self, value: uint16):
         """
         INSTRUCTION CALL
         inc - Increment - Increment ACC
         """
 
-    def _i037_dec(self, flag: uint8, value: uint16):
+    def _i037_dec(self, value: uint16):
         """
         INSTRUCTION CALL
         dec - Decrement - Decrement ACC
         """
 
-    def _i038_mul(self, flag: uint8, value: uint16):
+    def _i038_mul(self, value: uint16):
         """
         INSTRUCTION CALL
         mul - Multiply - Multiply ACC with VAL
         """
 
-    def _i039_div(self, flag: uint8, value: uint16):
+    def _i039_div(self, value: uint16):
         """
         INSTRUCTION CALL
         div - Divide - Divide ACC by VAL
         """
 
-    def _i040_mod(self, flag: uint8, value: uint16):
+    def _i040_mod(self, value: uint16):
         """
         INSTRUCTION CALL
         mod - Modulo - Remainder of division of ACC by VAL
         """
 
-    def _i096_portw(self, flag: uint8, value: uint16):
+    def _i096_portw(self, value: uint16):
         """
         INSTRUCTION CALL
         portw - Port Write - Writes ACC into port by address VAL
         """
 
-    def _i097_portr(self, flag: uint8, value: uint16):
+    def _i097_portr(self, value: uint16):
         """
         INSTRUCTION CALL
         portr - Port Read - Reads port by address VAL into ACC
         """
 
-    def _i126_interrupt(self, flag: uint8, value: uint16):
+    def _i126_interrupt(self, value: uint16):
         """
         INSTRUCTION CALL
         Exit code: 201
@@ -355,7 +342,7 @@ class QTEmulator:
         self.running = False
         self.exit_code = 201
 
-    def _i127_halt(self, flag: uint8, value: uint16):
+    def _i127_halt(self, value: uint16):
         """
         INSTRUCTION CALL
         Exit code: 100
