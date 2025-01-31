@@ -43,6 +43,15 @@ class QTEmulator:
 
         self._instruction_lookup = []
 
+    def _unknown_instruction_halt(self):
+        """
+        Called on any unknown instruction that is called
+        Exit code: 400
+        """
+
+        self.running = False
+        self.exit_code = 400
+
     def initialize_memory(self):
         """
         Initializes memory arrays
