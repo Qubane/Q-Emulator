@@ -202,11 +202,23 @@ class QTEmulator:
         jump - Jump - Unconditional jump to VAL
         """
 
+        if flag:
+            self.program_counter = self.cache[value]
+        else:
+            self.program_counter = value
+
     def _i011_jumpc(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
         jumpc - Jump Condition - Conditional jump to PR; Condition defined by bitmask
         """
+
+        # TODO: conditions
+
+        if flag:
+            self.program_counter = self.cache[self.pointer_register]
+        else:
+            self.program_counter = self.pointer_register
 
     def _i012_clf(self, flag: uint8, value: uint16):
         """
