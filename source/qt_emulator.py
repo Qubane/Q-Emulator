@@ -321,6 +321,8 @@ class QTEmulator:
         inc - Increment - Increment ACC
         """
 
+        self.accumulator += 1
+
     def _i037_dec(self, value: uint16):
         """
         INSTRUCTION CALL
