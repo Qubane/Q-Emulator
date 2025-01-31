@@ -127,6 +127,8 @@ class QTEmulator:
         store - Store - Stores ACC into address defined by VAL
         """
 
+        self.cache[value] = self.accumulator
+
     def _i003_loadp(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
