@@ -33,6 +33,7 @@ class QTEmulator:
         Initializes memory arrays
         """
 
+        self.rom = [c_uint16(0) for _ in range(2**self.ADDRESS_BIT_WIDTH)]
         self.cache = [c_uint16(0) for _ in range(2**self.ADDRESS_BIT_WIDTH)]
         self.stack = [c_uint16(0) for _ in range(2**self.ADDRESS_BIT_WIDTH)]
         self.address_stack = [c_uint16(0) for _ in range(2**self.ADDRESS_BIT_WIDTH)]
@@ -44,9 +45,9 @@ class QTEmulator:
         """
 
         for idx, instruction in enumerate(instructions):
-            memory_flag = (instruction[0]) & 1
+            memory_flag = c_uint8((instruction[0]) & 1)
             value = c_uint16(instruction[1])
             opcode = c_uint8(instruction[2])
 
             # M VVVV`VVVV`VVVV`VVVV OOO`OOOO
-            self.rom[idx] = c_uint32((memory_flag << 23) + (value << 7) + opcode)
+            self.rom[idx] = c_uint32((memory_flag.value << 23) + (value.value << 7) + opcode.value)
