@@ -90,11 +90,13 @@ class QTEmulator:
             opcode = uint8(self.rom[self.program_counter] & 127)
 
             # if memory flag -> use cache value
-            if flag and opcode != 2:
-                value = self.cache[value]
+            if flag:
+                bus = self.cache[value]
+            else:
+                bus = value
 
             # call instruction
-            self._instruction_lookup[opcode](value)
+            self._instruction_lookup[opcode](bus)
 
             # increment counter
             self.program_counter += 1
