@@ -90,7 +90,7 @@ class QTEmulator:
             opcode = uint8(self.rom[self.program_counter] & 127)
 
             # if memory flag -> use cache value
-            if flag:
+            if flag and opcode != 2:
                 value = self.cache[value]
 
             # call instruction
@@ -181,7 +181,7 @@ class QTEmulator:
 
         self.address_stack[self.address_stack_pointer] = self.program_counter
         self.address_stack_pointer += 1
-        self.program_counter = value
+        self.program_counter = value - 1
 
     def _i009_return(self, value: uint16):
         """
@@ -190,7 +190,7 @@ class QTEmulator:
         """
 
         self.address_stack_pointer -= 1
-        self.program_counter = self.address_stack[self.address_stack_pointer]
+        self.program_counter = self.address_stack[self.address_stack_pointer] - 1
 
     def _i010_jump(self, value: uint16):
         """
@@ -198,7 +198,7 @@ class QTEmulator:
         jump - Jump - Unconditional jump to VAL
         """
 
-        self.program_counter = value
+        self.program_counter = value - 1
 
     def _i011_jumpc(self, value: uint16):
         """
@@ -208,7 +208,7 @@ class QTEmulator:
 
         # TODO: conditions
 
-        self.program_counter = self.pointer_register
+        self.program_counter = self.pointer_register - 1
 
     def _i012_clf(self, value: uint16):
         """
