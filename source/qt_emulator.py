@@ -30,7 +30,7 @@ class QTEmulator:
         self.accumulator: uint16 = uint16(0)
         self.pointer_register: uint16 = uint16(0)
         self.program_counter: uint16 = uint16(0)
-        self.stack_counter: uint16 = uint16(0)
+        self.stack_pointer: uint16 = uint16(0)
         self.address_stack_counter: uint16 = uint16(0)
 
         # misc fields
@@ -160,6 +160,9 @@ class QTEmulator:
         INSTRUCTION CALL
         push - Push - Push ACC onto number stack
         """
+
+        self.stack[self.stack_pointer] = self.accumulator
+        self.stack_pointer += 1
 
     def _i007_pop(self, flag: uint8, value: uint16):
         """
