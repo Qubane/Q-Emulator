@@ -31,7 +31,7 @@ class QTEmulator:
         self.pointer_register: uint16 = uint16(0)
         self.program_counter: uint16 = uint16(0)
         self.stack_pointer: uint16 = uint16(0)
-        self.address_stack_counter: uint16 = uint16(0)
+        self.address_stack_pointer: uint16 = uint16(0)
 
         # misc fields
         self.running: bool = False
@@ -178,6 +178,14 @@ class QTEmulator:
         INSTRUCTION CALL
         call - Call - Pushes current IR into stack; jumps to VAL
         """
+
+        self.address_stack[self.address_stack_pointer] = self.program_counter
+        self.address_stack_pointer += 1
+
+        if flag:
+            self.program_counter = self.cache[value]
+        else:
+            self.program_counter = value
 
     def _i009_return(self, flag: uint8, value: uint16):
         """
