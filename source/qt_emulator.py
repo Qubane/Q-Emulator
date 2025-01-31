@@ -170,6 +170,9 @@ class QTEmulator:
         pop - Pop - Pop ACC from number stack
         """
 
+        self.stack_pointer -= 1
+        self.accumulator = self.stack[self.stack_pointer]
+
     def _i008_call(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
