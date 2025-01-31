@@ -29,6 +29,10 @@ class QTEmulator:
         self.stack_counter: uint16 = uint16(0)
         self.address_stack_counter: uint16 = uint16(0)
 
+        # misc fields
+        self.running: bool = False
+        self.exit_code: int = 0
+
         # instruction lookup table
         self._instruction_lookup: list[Callable] | None = None
 
@@ -68,9 +72,8 @@ class QTEmulator:
         Executes imported code
         """
 
-        while True:
+        self.running = True
+        while self.running:
             flag = self.rom[self.program_counter] >> 23
             value = (self.rom[self.program_counter] >> 7) & 65535
             opcode = self.rom[self.program_counter] & 127
-
-
