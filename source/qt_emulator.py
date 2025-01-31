@@ -293,6 +293,8 @@ class QTEmulator:
         add - Add - Add ACC and VAL
         """
 
+        self.accumulator = self.accumulator + value
+
     def _i033_sub(self, value: uint16):
         """
         INSTRUCTION CALL
