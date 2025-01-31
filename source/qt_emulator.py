@@ -193,6 +193,9 @@ class QTEmulator:
         return - Return - Pops value from stack to IR
         """
 
+        self.address_stack_pointer -= 1
+        self.program_counter = self.address_stack[self.address_stack_pointer]
+
     def _i010_jump(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
