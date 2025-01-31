@@ -280,6 +280,13 @@ class QTEmulator:
         comp - Compare - Compares ACC and VAL, -1 if ACC < VAL; 0 if ACC == VAL; 1 if ACC > VAL
         """
 
+        if self.accumulator < value:
+            self.accumulator = self.VALUE_BIT_WIDTH - 1
+        elif self.accumulator == value:
+            self.accumulator = 0
+        else:
+            self.accumulator = 1
+
     def _i032_add(self, value: uint16):
         """
         INSTRUCTION CALL
