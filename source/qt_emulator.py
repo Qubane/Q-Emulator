@@ -3,7 +3,7 @@ QT Architecture emulator
 """
 
 
-from ctypes import c_uint16, c_uint32
+from ctypes import c_uint8, c_uint16, c_uint32
 
 
 class QTEmulator:
@@ -37,8 +37,16 @@ class QTEmulator:
         self.stack = [c_uint16(0) for _ in range(2**self.ADDRESS_BIT_WIDTH)]
         self.address_stack = [c_uint16(0) for _ in range(2**self.ADDRESS_BIT_WIDTH)]
 
-    def import_code(self, instructions: list[tuple[bool, int, int]]):
+    def import_code(self, instructions: list[tuple[int, int, int]]):
         """
         Imports instructions into ROM
         :param instructions: list of instruction tuples
         """
+
+        for idx, instruction in enumerate(instructions):
+            memory_flag = (instruction[0]) & 1
+            value = c_uint16(instruction[1])
+            opcode = c_uint8(instruction[2])
+
+            # M VVVV`VVVV`VVVV`VVVV OOO`OOOO
+            self.rom[idx] = c_uint32((memory_flag << 23) + (value << 7) + opcode)
