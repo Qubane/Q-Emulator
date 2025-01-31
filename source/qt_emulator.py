@@ -232,6 +232,11 @@ class QTEmulator:
         and - And - Bitwise AND with ACC and VAL
         """
 
+        if flag:
+            self.accumulator = self.accumulator & self.cache[value]
+        else:
+            self.accumulator = self.accumulator & value
+
     def _i017_or(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
