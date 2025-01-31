@@ -1,3 +1,0 @@
-"""
-Emulator classes
-"""
