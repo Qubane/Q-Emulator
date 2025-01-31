@@ -53,15 +53,6 @@ class QTEmulator:
             if attr.__doc__.find("INSTRUCTION CALL") > -1:
                 self._instruction_lookup[int(field[2:5])] = attr
 
-    def _unknown_instruction_halt(self):
-        """
-        Called on any unknown instruction that is called
-        Exit code: 400
-        """
-
-        self.running = False
-        self.exit_code = 400
-
     def initialize_memory(self):
         """
         Initializes memory arrays
@@ -97,7 +88,20 @@ class QTEmulator:
             value = uint16((self.rom[self.program_counter] >> 7))
             opcode = uint8(self.rom[self.program_counter] & 127)
 
-    def _i000_nop(self):
+            self._instruction_lookup[opcode](flag, value)
+
+            self.program_counter += 1
+
+    def _unknown_instruction_halt(self, *args):
+        """
+        Called on any unknown instruction that is called
+        Exit code: 400
+        """
+
+        self.running = False
+        self.exit_code = 400
+
+    def _i000_nop(self, flag: uint8, value: uint16):
         """
         INSTRUCTION CALL
         NOP - No Operation
