@@ -79,9 +79,9 @@ class QTEmulator:
         """
 
         for idx, instruction in enumerate(instructions):
-            memory_flag = uint8((instruction[0]) & 1)
-            value = uint16(instruction[1])
-            opcode = uint8(instruction[2])
+            memory_flag = instruction[0]
+            value = instruction[1]
+            opcode = instruction[2]
 
             # M VVVV`VVVV`VVVV`VVVV OOO`OOOO
             self.rom[idx] = uint32((memory_flag << 23) + (value << 7) + opcode)
@@ -93,9 +93,9 @@ class QTEmulator:
 
         self.running = True
         while self.running:
-            flag = self.rom[self.program_counter] >> 23
-            value = (self.rom[self.program_counter] >> 7) & 65535
-            opcode = self.rom[self.program_counter] & 127
+            flag = uint8(self.rom[self.program_counter] >> 23)
+            value = uint16((self.rom[self.program_counter] >> 7))
+            opcode = uint8(self.rom[self.program_counter] & 127)
 
     def _i000_nop(self):
         """
