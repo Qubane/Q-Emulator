@@ -238,6 +238,8 @@ class QTEmulator:
         xor - Xor - Bitwise XOR with ACC and VAL
         """
 
+        self.accumulator = self.accumulator ^ value
+
     def _i019_lsl(self, value: uint16):
         """
         INSTRUCTION CALL
