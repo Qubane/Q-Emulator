@@ -329,6 +329,8 @@ class QTEmulator:
         dec - Decrement - Decrement ACC
         """
 
+        self.accumulator -= 1
+
     def _i038_mul(self, value: uint16):
         """
         INSTRUCTION CALL
