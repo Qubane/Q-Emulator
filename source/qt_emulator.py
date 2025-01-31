@@ -36,3 +36,9 @@ class QTEmulator:
         self.cache = [c_uint16(0) for _ in range(2**self.ADDRESS_BIT_WIDTH)]
         self.stack = [c_uint16(0) for _ in range(2**self.ADDRESS_BIT_WIDTH)]
         self.address_stack = [c_uint16(0) for _ in range(2**self.ADDRESS_BIT_WIDTH)]
+
+    def import_code(self, instructions: list[tuple[bool, int, int]]):
+        """
+        Imports instructions into ROM
+        :param instructions: list of instruction tuples
+        """
