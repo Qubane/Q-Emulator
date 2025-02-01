@@ -137,7 +137,7 @@ class QTEmulator:
         """
         Returns flag status by index (0 - 15)
         """
-        
+
         return (self.flag_register & (1 << bit)) > 0
 
     def _unknown_instruction_halt(self, *args):
@@ -179,6 +179,8 @@ class QTEmulator:
         INSTRUCTION CALL
         loadp - Load Pointer - Loads value from cache using ACC as address
         """
+
+        self.accumulator = self.cache[self.accumulator]
 
     def _i004_loadpr(self, value: uint16):
         """
