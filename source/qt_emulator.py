@@ -292,6 +292,12 @@ class QTEmulator:
         lsl - Logical Shift Left - Shifts ACC left VAL times
         """
 
+        carry = self.accumulator >> (self.VALUE_BIT_WIDTH - 1)
+        if carry:
+            self._set_flag_name("carry", True)
+        else:
+            self._set_flag_name("carry", False)
+
         self.accumulator = self.accumulator << value
 
     def _i020_lsr(self, value: uint16):
