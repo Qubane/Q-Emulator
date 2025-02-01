@@ -111,6 +111,9 @@ class QTEmulator:
             # call instruction
             self._instruction_lookup[opcode](bus)
 
+            # check flags
+            self._check_flags()
+
             # increment counter
             self.program_counter += 1
 
@@ -144,6 +147,33 @@ class QTEmulator:
         """
 
         return (self.flag_register & (1 << bit)) > 0
+
+    def _check_flags(self):
+        """
+        Checks some of the flags
+        """
+
+        # parity
+        par = self.accumulator ^ (self.accumulator >> 1)
+        par ^= par >> 2
+        par ^= par >> 4
+        par ^= par >> 8
+        if par:
+            self._set_flag_name("parity", True)
+        else:
+            self._set_flag_name("parity", False)
+
+        # zero
+        if self.accumulator == 0:
+            self._set_flag_name("zero", True)
+        else:
+            self._set_flag_name("zero", False)
+
+        # sign
+        if self.accumulator & (1 << (self.VALUE_BIT_WIDTH - 1)) > 0:
+            self._set_flag_name("sign", True)
+        else:
+            self._set_flag_name("sign", False)
 
     def _unknown_instruction_halt(self, *args):
         """
