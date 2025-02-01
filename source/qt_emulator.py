@@ -497,11 +497,15 @@ class QTEmulator:
         portw - Port Write - Writes ACC into port by address VAL
         """
 
+        self.ports[value] = self.accumulator
+
     def _i097_portr(self, value: uint16):
         """
         INSTRUCTION CALL
         portr - Port Read - Reads port by address VAL into ACC
         """
+
+        self.accumulator = self.ports[value]
 
     def _i126_int(self, value: uint16):
         """
