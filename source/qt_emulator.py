@@ -12,10 +12,17 @@ class QTEmulator:
     QT CPU Emulator
     """
 
-    ADDRESS_BIT_WIDTH = 16
+    ADDRESS_BIT_WIDTH: int = 16
 
-    VALUE_BIT_WIDTH = ADDRESS_BIT_WIDTH
-    OPCODE_BIT_WIDTH = 7
+    VALUE_BIT_WIDTH: int = ADDRESS_BIT_WIDTH
+    OPCODE_BIT_WIDTH: int = 7
+
+    FLAG_MAPPING: dict[str, int] = {
+        "carry": 0,
+        "parity": 1,
+        "zero": 2,
+        "sign": 3
+    }
 
     def __init__(self):
         # program memory
@@ -30,6 +37,7 @@ class QTEmulator:
         self.accumulator: uint16 = uint16(0)
         self.pointer_register: uint16 = uint16(0)
         self.program_counter: uint16 = uint16(0)
+        self.flag_register: uint16 = uint16(0)
         self.stack_pointer: uint16 = uint16(0)
         self.address_stack_pointer: uint16 = uint16(0)
 
@@ -100,6 +108,37 @@ class QTEmulator:
 
             # increment counter
             self.program_counter += 1
+
+    def _set_flag_name(self, name: str, value: bool):
+        """
+        Set flag by name
+        """
+
+        self._set_flag(self.FLAG_MAPPING[name], value)
+
+    def _set_flag(self, bit: int, value: bool):
+        """
+        Sets flag by bit index (0 - 15)
+        """
+
+        if value:
+            self.flag_register |= 1 << bit
+        else:
+            self.flag_register &= ~(1 << bit)
+
+    def _get_flag_name(self, name: str) -> bool:
+        """
+        Returns flag status by name
+        """
+
+        return self._get_flag(self.FLAG_MAPPING[name])
+
+    def _get_flag(self, bit: int) -> bool:
+        """
+        Returns flag status by index (0 - 15)
+        """
+        
+        return (self.flag_register & (1 << bit)) > 0
 
     def _unknown_instruction_halt(self, *args):
         """
