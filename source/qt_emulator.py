@@ -7,6 +7,9 @@ from typing import Callable
 from numpy import uint8, uint16, uint32, zeros, ndarray
 
 
+MAX_UINT16 = 2**16 - 1
+
+
 class QTEmulator:
     """
     QT CPU Emulator
@@ -126,7 +129,7 @@ class QTEmulator:
         if value:
             self.flag_register |= 1 << bit
         else:
-            self.flag_register &= ~(1 << bit)
+            self.flag_register &= ~(uint16(1 << bit))
 
     def _get_flag_name(self, name: str) -> bool:
         """
@@ -353,6 +356,12 @@ class QTEmulator:
         add - Add - Add ACC and VAL
         """
 
+        # dumb way to check for an overflow
+        if int(self.accumulator) + value > MAX_UINT16:
+            self._set_flag_name("carry", True)
+        else:
+            self._set_flag_name("carry", False)
+
         self.accumulator = self.accumulator + value
 
     def _i033_sub(self, value: uint16):
@@ -360,6 +369,11 @@ class QTEmulator:
         INSTRUCTION CALL
         sub - Add - Subtract VAL from ACC
         """
+
+        if int(self.accumulator) - value < 0:
+            self._set_flag_name("carry", True)
+        else:
+            self._set_flag_name("carry", False)
 
         self.accumulator = self.accumulator - value
 
