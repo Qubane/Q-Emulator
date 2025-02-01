@@ -158,7 +158,7 @@ class QTEmulator:
         par ^= par >> 2
         par ^= par >> 4
         par ^= par >> 8
-        if par:
+        if par & 1:
             self._set_flag_name("parity", True)
         else:
             self._set_flag_name("parity", False)
