@@ -3,9 +3,12 @@ QT Architecture emulator
 """
 
 
+import warnings
 from typing import Callable
 from numpy import uint8, uint16, uint32, zeros, ndarray
 
+
+warnings.filterwarnings('ignore')
 
 MAX_UINT16 = 2**16 - 1
 
@@ -388,7 +391,7 @@ class QTEmulator:
         add - Add - Add ACC and VAL
         """
 
-        if int(self.accumulator) + value > MAX_UINT16:
+        if uint32(self.accumulator) + value > MAX_UINT16:
             self._set_flag_name("carry", True)
         else:
             self._set_flag_name("carry", False)
@@ -401,7 +404,7 @@ class QTEmulator:
         sub - Add - Subtract VAL from ACC
         """
 
-        if int(self.accumulator) - value < 0:
+        if uint32(self.accumulator) - value < 0:
             self._set_flag_name("carry", True)
         else:
             self._set_flag_name("carry", False)
@@ -414,7 +417,7 @@ class QTEmulator:
         addc - Add Carry - Add ACC and VAL, with carry
         """
 
-        result = int(self.accumulator) + value + self._get_flag_name("carry")
+        result = uint32(self.accumulator) + value + self._get_flag_name("carry")
         if result > MAX_UINT16:
             self._set_flag_name("carry", True)
         else:
@@ -428,7 +431,7 @@ class QTEmulator:
         subc - Sub Carry - Subtract VAL from ACC, with carry
         """
 
-        result = int(self.accumulator) - value - self._get_flag_name("carry")
+        result = uint32(self.accumulator) - value - self._get_flag_name("carry")
         if result < 0:
             self._set_flag_name("carry", True)
         else:
@@ -442,7 +445,7 @@ class QTEmulator:
         inc - Increment - Increment ACC
         """
 
-        if int(self.accumulator) + 1 > MAX_UINT16:
+        if uint32(self.accumulator) + 1 > MAX_UINT16:
             self._set_flag_name("carry", True)
         else:
             self._set_flag_name("carry", False)
@@ -455,7 +458,7 @@ class QTEmulator:
         dec - Decrement - Decrement ACC
         """
 
-        if int(self.accumulator) - 1 < 0:
+        if uint32(self.accumulator) - 1 < 0:
             self._set_flag_name("carry", True)
         else:
             self._set_flag_name("carry", False)
@@ -468,7 +471,7 @@ class QTEmulator:
         mul - Multiply - Multiply ACC with VAL
         """
 
-        if int(self.accumulator) * value > MAX_UINT16:
+        if uint32(self.accumulator) * value > MAX_UINT16:
             self._set_flag_name("overflow", True)
         else:
             self._set_flag_name("overflow", False)
