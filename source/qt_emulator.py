@@ -410,6 +410,11 @@ class QTEmulator:
         inc - Increment - Increment ACC
         """
 
+        if int(self.accumulator) + 1 > MAX_UINT16:
+            self._set_flag_name("carry", True)
+        else:
+            self._set_flag_name("carry", False)
+
         self.accumulator += 1
 
     def _i037_dec(self, value: uint16):
@@ -417,6 +422,11 @@ class QTEmulator:
         INSTRUCTION CALL
         dec - Decrement - Decrement ACC
         """
+
+        if int(self.accumulator) - 1 < 0:
+            self._set_flag_name("carry", True)
+        else:
+            self._set_flag_name("carry", False)
 
         self.accumulator -= 1
 
