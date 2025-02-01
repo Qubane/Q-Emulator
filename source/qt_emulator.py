@@ -260,6 +260,8 @@ class QTEmulator:
         clf - Clear Flag - Clears flags; Flags are defined by bitmask
         """
 
+        self.flag_register = self.flag_register.__class__(0)
+
     def _i016_and(self, value: uint16):
         """
         INSTRUCTION CALL
