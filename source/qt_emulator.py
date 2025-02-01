@@ -436,7 +436,12 @@ class QTEmulator:
         mul - Multiply - Multiply ACC with VAL
         """
 
-        self.accumulator = uint16(self.accumulator * value)
+        if int(self.accumulator) * value > MAX_UINT16:
+            self._set_flag_name("overflow", True)
+        else:
+            self._set_flag_name("overflow", False)
+
+        self.accumulator = self.accumulator * value
 
     def _i039_div(self, value: uint16):
         """
