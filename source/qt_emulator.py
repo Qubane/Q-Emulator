@@ -356,7 +356,6 @@ class QTEmulator:
         add - Add - Add ACC and VAL
         """
 
-        # dumb way to check for an overflow
         if int(self.accumulator) + value > MAX_UINT16:
             self._set_flag_name("carry", True)
         else:
@@ -383,11 +382,27 @@ class QTEmulator:
         addc - Add Carry - Add ACC and VAL, with carry
         """
 
+        result = int(self.accumulator) + value + self._get_flag_name("carry")
+        if result > MAX_UINT16:
+            self._set_flag_name("carry", True)
+        else:
+            self._set_flag_name("carry", False)
+
+        self.accumulator = uint16(result & MAX_UINT16)
+
     def _i035_subc(self, value: uint16):
         """
         INSTRUCTION CALL
         subc - Sub Carry - Subtract VAL from ACC, with carry
         """
+
+        result = int(self.accumulator) - value - self._get_flag_name("carry")
+        if result < 0:
+            self._set_flag_name("carry", True)
+        else:
+            self._set_flag_name("carry", False)
+
+        self.accumulator = uint16(result & MAX_UINT16)
 
     def _i036_inc(self, value: uint16):
         """
