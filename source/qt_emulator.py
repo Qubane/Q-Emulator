@@ -21,7 +21,9 @@ class QTEmulator:
         "carry": 0,
         "parity": 1,
         "zero": 2,
-        "sign": 3
+        "sign": 3,
+        "overflow": 4,
+        "underflow": 5
     }
 
     def __init__(self):
@@ -294,9 +296,9 @@ class QTEmulator:
 
         carry = self.accumulator >> (self.VALUE_BIT_WIDTH - 1)
         if carry:
-            self._set_flag_name("carry", True)
+            self._set_flag_name("overflow", True)
         else:
-            self._set_flag_name("carry", False)
+            self._set_flag_name("overflow", False)
 
         self.accumulator = self.accumulator << value
 
@@ -305,6 +307,12 @@ class QTEmulator:
         INSTRUCTION CALL
         lsr - Logical Shift Right - Shifts ACC right VAL times
         """
+
+        carry = (self.accumulator & 1) << (self.VALUE_BIT_WIDTH - 1)
+        if carry:
+            self._set_flag_name("underflow", True)
+        else:
+            self._set_flag_name("underflow", False)
 
         self.accumulator = self.accumulator >> value
 
