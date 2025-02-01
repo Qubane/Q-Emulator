@@ -37,6 +37,7 @@ class QTEmulator:
         self.cache: ndarray[uint16] | None = None
         self.stack: ndarray[uint16] | None = None
         self.address_stack: ndarray[uint16] | None = None
+        self.ports: ndarray[uint16] | None = None
 
         # register memory (registers)
         self.accumulator: uint16 = uint16(0)
@@ -76,6 +77,7 @@ class QTEmulator:
         self.cache = zeros(2**self.ADDRESS_BIT_WIDTH, dtype=uint16)
         self.stack = zeros(2**self.ADDRESS_BIT_WIDTH, dtype=uint16)
         self.address_stack = zeros(2**self.ADDRESS_BIT_WIDTH, dtype=uint16)
+        self.ports = zeros(2**self.ADDRESS_BIT_WIDTH, dtype=uint16)
 
     def import_code(self, instructions: list[tuple[int, int, int]]):
         """
