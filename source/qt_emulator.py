@@ -178,11 +178,11 @@ class QTEmulator:
     def _unknown_instruction_halt(self, *args):
         """
         Called on any unknown instruction that is called
-        Exit code: 400
+        Exit code: -1
         """
 
         self.running = False
-        self.exit_code = 400
+        self.exit_code = -1
 
     def _i000_nop(self, value: uint16):
         """
@@ -504,19 +504,19 @@ class QTEmulator:
     def _i126_int(self, value: uint16):
         """
         INSTRUCTION CALL
-        Exit code: 201
+        Exit code: value
         int - Interrupt - Interrupts execution
         """
 
         self.running = False
-        self.exit_code = 201
+        self.exit_code = value
 
     def _i127_halt(self, value: uint16):
         """
         INSTRUCTION CALL
-        Exit code: 100
+        Exit code: 0
         halt - Halt - Halts execution
         """
 
         self.running = False
-        self.exit_code = 200
+        self.exit_code = 0
