@@ -501,11 +501,11 @@ class QTEmulator:
         portr - Port Read - Reads port by address VAL into ACC
         """
 
-    def _i126_interrupt(self, value: uint16):
+    def _i126_int(self, value: uint16):
         """
         INSTRUCTION CALL
         Exit code: 201
-        interrupt - Interrupt - Interrupts execution
+        int - Interrupt - Interrupts execution
         """
 
         self.running = False
