@@ -249,9 +249,10 @@ class QTEmulator:
         jumpc - Jump Condition - Conditional jump to PR; Condition defined by bitmask
         """
 
-        # TODO: conditions
+        condition = any(self._get_flag(x) for x in range(16) if (value & (1 << x)))
 
-        self.program_counter = self.pointer_register - 1
+        if condition:
+            self.program_counter = self.pointer_register - 1
 
     def _i012_clf(self, value: uint16):
         """
