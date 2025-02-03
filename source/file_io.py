@@ -14,17 +14,17 @@ def load(filepath: str) -> list[tuple[int, int, int]]:
     """
 
     instructions = list()
-    with open(filepath, "rb") as filepath:
+    with open(filepath, "rb") as file:
         namespace = b''  # namespace header
-        while (char := filepath.read(1)) != b'\x00':
+        while (char := file.read(1)) != b'\x00':
             namespace += char
 
         # read and decode instructions
         while True:
             if namespace == b'QT':
-                raw_instruction = filepath.read(4)
+                raw_instruction = file.read(4)
             elif namespace == b'QM':
-                raw_instruction = filepath.read(3)
+                raw_instruction = file.read(3)
             else:
                 raise Exception
             if not raw_instruction:
@@ -48,5 +48,3 @@ class QTEmulatorIO:
         """
         Creates a memory dump
         """
-
-
