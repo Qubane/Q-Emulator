@@ -48,3 +48,20 @@ class QTEmulatorIO:
         """
         Creates a memory dump
         """
+
+        offset = 16
+        index_offset = 4
+        added_offset = 3
+        number_offset = 5
+        with open(filepath, "w", encoding="ASCII") as file:
+            # cache dump
+            file.write("[CACHE START]\n")
+            file.write(" " * (index_offset + added_offset))
+            for i in range(offset):
+                file.write(f"{i: {number_offset}d} ")
+            for index in range(0, len(emulator.cache), offset):
+                file.write(
+                    "\n" +
+                    f"{index:0{index_offset}d} | " +
+                    " ".join(f"{val:0{number_offset}d}" for val in emulator.cache[index:index+offset]))
+            file.write("\n[CACHE END]")
