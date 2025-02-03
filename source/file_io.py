@@ -42,3 +42,9 @@ class QTEmulatorIO:
     """
     File IO for QTEmulator
     """
+
+    @staticmethod
+    def create_memory_dump(emulator: QTEmulator):
+        """
+        Creates a memory dump
+        """
