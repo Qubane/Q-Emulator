@@ -57,7 +57,7 @@ class QTEmulatorIO:
         Writes dump for a given memory section
         """
 
-        file.write(f"{'[' + section_name.upper() + ' START]':=^{cls.section_size}}\n")
+        file.write(f"{'[' + section_name.upper() + ' SECTION START]':=^{cls.section_size}}\n")
         file.write(" " * (cls.index_offset + cls.added_offset))
         for i in range(cls.offset):
             file.write(f"{i: {cls.number_offset}d} ")
@@ -66,7 +66,7 @@ class QTEmulatorIO:
                 "\n" +
                 f"{index:0{cls.index_offset}d} | " +
                 " ".join(f"{val:0{cls.number_offset}d}" for val in memory[index:index + cls.offset]))
-        file.write(f"\n{'[' + section_name.upper() + ' END]':=^{cls.section_size}}\n\n")
+        file.write(f"\n{'[' + section_name.upper() + ' SECTION END]':=^{cls.section_size}}\n\n")
 
     @classmethod
     def create_memory_dump(cls, filepath: str, emulator: QTEmulator):
@@ -82,3 +82,12 @@ class QTEmulatorIO:
             cls._create_memory_dump(file, emulator.address_stack, "ADDR_STACK")
         with open(f"{filepath}.PORTS.dmp", "w", encoding="ASCII") as file:
             cls._create_memory_dump(file, emulator.ports, "PORTS")
+        with open(f"{filepath}.REGISTERS.dmp", "w", encoding="ASCII") as file:
+            file.write(f"{'[REGISTER SECTION START]':=^{cls.section_size}}\n")
+            file.write(f"{'ACC': <4} = {emulator.accumulator.item()}\n")
+            file.write(f"{'PR': <4} = {emulator.pointer_register.item()}\n")
+            file.write(f"{'PC': <4} = {emulator.program_counter.item()}\n")
+            file.write(f"{'FR': <4} = {emulator.flag_register.item()}\n")
+            file.write(f"{'SP': <4} = {emulator.stack_pointer.item()}\n")
+            file.write(f"{'ASP': <4} = {emulator.address_stack_pointer.item()}\n")
+            file.write(f"{'[REGISTER SECTION END]':=^{cls.section_size}}\n")
