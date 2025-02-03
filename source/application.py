@@ -4,7 +4,7 @@ The main application class that is executed
 
 
 from argparse import ArgumentParser, Namespace
-from source.file_io import load
+from source.file_io import *
 from source.qt_emulator import QTEmulator
 
 
@@ -29,6 +29,8 @@ class Application:
                             help="code namespace",
                             choices=["QT", "QM"],
                             default="QT")
+        parser.add_argument("-d", "--dump",
+                            help="make memory dump with given name")
 
         self.args = parser.parse_args()
 
@@ -54,3 +56,6 @@ class Application:
         emulator.initialize_memory()
         emulator.import_code(instruction_tuples)
         emulator.run()
+
+        if self.args.dump:
+            QTEmulatorIO.create_memory_dump(self.args.dump, emulator)
