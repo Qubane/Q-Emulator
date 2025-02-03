@@ -3,6 +3,9 @@ File reading and writing implementations.
 """
 
 
+from source.qt_emulator import QTEmulator
+
+
 def load(file: str) -> list[tuple[int, int, int]]:
     """
     Reads binary executable file, compiled by Q-Compiler
@@ -33,3 +36,9 @@ def load(file: str) -> list[tuple[int, int, int]]:
 
             instructions.append((memory_flag, value, opcode))
     return instructions
+
+
+class QTEmulatorIO:
+    """
+    File IO for QTEmulator
+    """
