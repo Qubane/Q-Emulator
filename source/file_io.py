@@ -3,6 +3,8 @@ File reading and writing implementations.
 """
 
 
+from typing import TextIO
+from numpy import ndarray
 from source.qt_emulator import QTEmulator
 
 
@@ -43,25 +45,37 @@ class QTEmulatorIO:
     File IO for QTEmulator
     """
 
-    @staticmethod
-    def create_memory_dump(filepath: str, emulator: QTEmulator):
+    offset = 16
+    index_offset = 4
+    added_offset = 3
+    number_offset = 5
+    section_size = offset * (number_offset + 1) + index_offset + added_offset
+
+    @classmethod
+    def _create_memory_dump(cls, file: TextIO, memory: ndarray, section_name: str):
+        """
+        Writes dump for a given memory section
+        """
+
+        file.write(f"{'[' + section_name.upper() + ' START]':=^{cls.section_size}}\n")
+        file.write(" " * (cls.index_offset + cls.added_offset))
+        for i in range(cls.offset):
+            file.write(f"{i: {cls.number_offset}d} ")
+        for index in range(0, len(memory), cls.offset):
+            file.write(
+                "\n" +
+                f"{index:0{cls.index_offset}d} | " +
+                " ".join(f"{val:0{cls.number_offset}d}" for val in memory[index:index + cls.offset]))
+        file.write(f"\n{'[' + section_name.upper() + ' END]':=^{cls.section_size}}\n\n")
+
+    @classmethod
+    def create_memory_dump(cls, filepath: str, emulator: QTEmulator):
         """
         Creates a memory dump
         """
 
-        offset = 16
-        index_offset = 4
-        added_offset = 3
-        number_offset = 5
         with open(filepath, "w", encoding="ASCII") as file:
-            # cache dump
-            file.write("[CACHE START]\n")
-            file.write(" " * (index_offset + added_offset))
-            for i in range(offset):
-                file.write(f"{i: {number_offset}d} ")
-            for index in range(0, len(emulator.cache), offset):
-                file.write(
-                    "\n" +
-                    f"{index:0{index_offset}d} | " +
-                    " ".join(f"{val:0{number_offset}d}" for val in emulator.cache[index:index+offset]))
-            file.write("\n[CACHE END]")
+            cls._create_memory_dump(file, emulator.cache, "CACHE")
+            cls._create_memory_dump(file, emulator.stack, "STACK")
+            cls._create_memory_dump(file, emulator.address_stack, "ADDR_STACK")
+            cls._create_memory_dump(file, emulator.ports, "PORTS")
