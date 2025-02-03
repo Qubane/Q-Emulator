@@ -74,8 +74,11 @@ class QTEmulatorIO:
         Creates a memory dump
         """
 
-        with open(filepath, "w", encoding="ASCII") as file:
+        with open(f"{filepath}.CACHE.dmp", "w", encoding="ASCII") as file:
             cls._create_memory_dump(file, emulator.cache, "CACHE")
+        with open(f"{filepath}.STACK.dmp", "w", encoding="ASCII") as file:
             cls._create_memory_dump(file, emulator.stack, "STACK")
+        with open(f"{filepath}.ADDR_STACK.dmp", "w", encoding="ASCII") as file:
             cls._create_memory_dump(file, emulator.address_stack, "ADDR_STACK")
+        with open(f"{filepath}.PORTS.dmp", "w", encoding="ASCII") as file:
             cls._create_memory_dump(file, emulator.ports, "PORTS")
