@@ -6,25 +6,25 @@ File reading and writing implementations.
 from source.qt_emulator import QTEmulator
 
 
-def load(file: str) -> list[tuple[int, int, int]]:
+def load(filepath: str) -> list[tuple[int, int, int]]:
     """
     Reads binary executable file, compiled by Q-Compiler
-    :param file: executable filepath
+    :param filepath: executable filepath
     :return: list of instruction tuples
     """
 
     instructions = list()
-    with open(file, "rb") as file:
+    with open(filepath, "rb") as filepath:
         namespace = b''  # namespace header
-        while (char := file.read(1)) != b'\x00':
+        while (char := filepath.read(1)) != b'\x00':
             namespace += char
 
         # read and decode instructions
         while True:
             if namespace == b'QT':
-                raw_instruction = file.read(4)
+                raw_instruction = filepath.read(4)
             elif namespace == b'QM':
-                raw_instruction = file.read(3)
+                raw_instruction = filepath.read(3)
             else:
                 raise Exception
             if not raw_instruction:
@@ -44,7 +44,9 @@ class QTEmulatorIO:
     """
 
     @staticmethod
-    def create_memory_dump(emulator: QTEmulator):
+    def create_memory_dump(filepath: str, emulator: QTEmulator):
         """
         Creates a memory dump
         """
+
+
