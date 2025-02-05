@@ -379,11 +379,11 @@ class QTEmulator:
         """
 
         if self.accumulator < value:
-            self.accumulator = self.VALUE_BIT_WIDTH - 1
+            self.accumulator = uint16(self.VALUE_BIT_WIDTH - 1)
         elif self.accumulator == value:
-            self.accumulator = 0
+            self.accumulator = uint16(0)
         else:
-            self.accumulator = 1
+            self.accumulator = uint16(1)
 
     def _i032_add(self, value: uint16):
         """
