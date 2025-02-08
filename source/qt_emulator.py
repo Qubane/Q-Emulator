@@ -238,7 +238,15 @@ class QTEmulator:
 
         self.cache[self.pointer_register] = self.accumulator
 
-    def _i006_push(self, value: uint16):
+    def _i006_tapr(self, value: uint16):
+        """
+        INSTRUCTION CALL
+        tapr - Transfer ACC to PR - Transfers ACC into PR
+        """
+
+        self.pointer_register = self.accumulator
+
+    def _i007_push(self, value: uint16):
         """
         INSTRUCTION CALL
         push - Push - Push ACC onto number stack
@@ -247,7 +255,7 @@ class QTEmulator:
         self.stack[self.stack_pointer] = self.accumulator
         self.stack_pointer += 1
 
-    def _i007_pop(self, value: uint16):
+    def _i008_pop(self, value: uint16):
         """
         INSTRUCTION CALL
         pop - Pop - Pop ACC from number stack
@@ -256,7 +264,7 @@ class QTEmulator:
         self.stack_pointer -= 1
         self.accumulator = self.stack[self.stack_pointer]
 
-    def _i008_call(self, value: uint16):
+    def _i009_call(self, value: uint16):
         """
         INSTRUCTION CALL
         call - Call - Pushes current IR into stack; jumps to VAL
@@ -266,7 +274,7 @@ class QTEmulator:
         self.address_stack_pointer += 1
         self.program_counter = value - 1
 
-    def _i009_return(self, value: uint16):
+    def _i010_return(self, value: uint16):
         """
         INSTRUCTION CALL
         return - Return - Pops value from stack to IR
@@ -275,7 +283,7 @@ class QTEmulator:
         self.address_stack_pointer -= 1
         self.program_counter = self.address_stack[self.address_stack_pointer]
 
-    def _i010_jump(self, value: uint16):
+    def _i011_jump(self, value: uint16):
         """
         INSTRUCTION CALL
         jump - Jump - Unconditional jump to VAL
@@ -283,7 +291,7 @@ class QTEmulator:
 
         self.program_counter = value - 1
 
-    def _i011_jumpc(self, value: uint16):
+    def _i012_jumpc(self, value: uint16):
         """
         INSTRUCTION CALL
         jumpc - Jump Condition - Conditional jump to PR; Condition defined by bitmask
@@ -294,7 +302,7 @@ class QTEmulator:
         if condition:
             self.program_counter = self.pointer_register - 1
 
-    def _i012_clf(self, value: uint16):
+    def _i013_clf(self, value: uint16):
         """
         INSTRUCTION CALL
         clf - Clear Flag - Clears flags; Flags are defined by bitmask
