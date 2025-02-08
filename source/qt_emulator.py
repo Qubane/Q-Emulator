@@ -387,7 +387,7 @@ class QTEmulator:
         """
 
         if self.accumulator < value:
-            self.accumulator = uint16(self.VALUE_BIT_WIDTH - 1)
+            self.accumulator = uint16(MAX_UINT16)
         elif self.accumulator == value:
             self.accumulator = uint16(0)
         else:
