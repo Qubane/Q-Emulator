@@ -509,6 +509,7 @@ class QTEmulator:
         """
 
         self.ports[value] = self.accumulator
+        print(self.accumulator, value)
 
     def _i097_portr(self, value: uint16):
         """
