@@ -51,6 +51,7 @@ class QTEmulator:
         self.address_stack_pointer: uint16 = uint16(0)
 
         # misc fields
+        self.instructions_executed: int = 0
         self.running: bool = False
         self.exit_code: int = 0
 
@@ -115,12 +116,16 @@ class QTEmulator:
 
             # call instruction
             self._instruction_lookup[opcode](bus)
+            self.instructions_executed += 1
 
             # check flags
             self._check_flags()
 
             # increment counter
             self.program_counter += 1
+
+        # after CPU was halted
+        print(f"Done after {self.instructions_executed} instructions;")
 
     def _set_flag_name(self, name: str, value: bool):
         """
