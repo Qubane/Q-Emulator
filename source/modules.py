@@ -46,10 +46,11 @@ class ScreenModule:
         Updates events
         """
 
+        pg.display.update()
         for event in pg.event.get():
             pass
 
-    def blit_array(self, array: ndarray[uint16], start: int):
+    def blit_array(self, array: ndarray, start: int):
         """
         Blits a slice of array to screen
         :param array: cache array
@@ -66,7 +67,7 @@ class ScreenModule:
         elif self.color_mode is ColorMode.RGB888:   # rgb888
             self._blit_rgb888(array, start)
 
-    def _blit_bw(self, array: ndarray[uint16], start: int):
+    def _blit_bw(self, array: ndarray, start: int):
         """
         Blits a slice of array to screen in BW color mode
         """
@@ -81,17 +82,17 @@ class ScreenModule:
             else:
                 pass
 
-    def _blit_bw8(self, array: ndarray[uint16], start: int):
+    def _blit_bw8(self, array: ndarray, start: int):
         """
         Blits a slice of array to screen in grayscale color mode
         """
 
-    def _blit_rgb565(self, array: ndarray[uint16], start: int):
+    def _blit_rgb565(self, array: ndarray, start: int):
         """
         Blits a slice of array to screen in RGB565 color mode
         """
 
-    def _blit_rgb888(self, array: ndarray[uint16], start: int):
+    def _blit_rgb888(self, array: ndarray, start: int):
         """
         Blits a slice of array to screen in RGB888 color mode
         """
