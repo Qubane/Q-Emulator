@@ -73,11 +73,11 @@ class ScreenModule:
         """
 
         for bit_index in range(self.width * self.height):
-            color = array[start + (bit_index // 16)]  # programmers fault if this raises an error
+            value = array[start + (bit_index // 16)]  # programmers fault if this raises an error
             x = bit_index % self.width
             y = bit_index // self.width
 
-            if color & (1 << (bit_index % 16)) > 0:
+            if value & (1 << (bit_index % 16)) > 0:
                 pg.draw.line(self.screen, (255, 255, 255), (x, y), (x, y))
             else:
                 pass
@@ -86,6 +86,13 @@ class ScreenModule:
         """
         Blits a slice of array to screen in grayscale color mode
         """
+
+        for y in range(self.height):
+            for x in range(self.width):
+                index = (x + y * self.width) // 2
+                value = array[start + index]
+                color = (value & (0xFF << (x % 2))) >> (x % 2)
+                pg.draw.line(self.screen, (color, color, color), (x, y), (x, y))
 
     def _blit_rgb565(self, array: ndarray, start: int):
         """
