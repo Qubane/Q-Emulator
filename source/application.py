@@ -55,8 +55,11 @@ class Application:
             raise Exception
 
         # TODO: get rid of this temporary code
-        test = ScreenModule(64, 64, "RGB888")
+        test = ScreenModule(64, 64, "BW")
         test.init()
+        import numpy
+        test.blit_array(numpy.random.randint(0, 65535, 65536, dtype=numpy.uint16), 0)
+        test.update()
 
         emulator.initialize_memory()
         emulator.import_code(instruction_tuples)
@@ -65,6 +68,9 @@ class Application:
 
             if emulator.exit_code == 0x80:
                 self.module_interrupt()
+
+        # after CPU was halted
+        print(f"Done after {emulator.instructions_executed} instructions;")
 
         if self.args.dump:
             QTEmulatorIO.create_memory_dump(self.args.dump, emulator)
