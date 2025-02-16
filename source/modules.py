@@ -74,10 +74,11 @@ class ScreenModule:
 
         for y in range(self.height):
             for x in range(self.width):
-                index = x + y * self.width
+                true_index = x + y * self.width
+                index = true_index // 16
                 value = array[start + index]
 
-                if value & (1 << (index % 16)) > 0:
+                if value & (1 << (true_index % 16)) > 0:
                     pg.draw.line(self.screen, (255, 255, 255), (x, y), (x, y))
                 else:
                     pass
