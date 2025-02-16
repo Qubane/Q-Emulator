@@ -72,15 +72,15 @@ class ScreenModule:
         Blits a slice of array to screen in BW color mode
         """
 
-        for bit_index in range(self.width * self.height):
-            value = array[start + (bit_index // 16)]  # programmers fault if this raises an error
-            x = bit_index % self.width
-            y = bit_index // self.width
+        for y in range(self.height):
+            for x in range(self.width):
+                index = x + y * self.width
+                value = array[start + index]
 
-            if value & (1 << (bit_index % 16)) > 0:
-                pg.draw.line(self.screen, (255, 255, 255), (x, y), (x, y))
-            else:
-                pass
+                if value & (1 << (index % 16)) > 0:
+                    pg.draw.line(self.screen, (255, 255, 255), (x, y), (x, y))
+                else:
+                    pass
 
     def _blit_bw8(self, array: ndarray, start: int):
         """
