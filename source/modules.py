@@ -27,3 +27,10 @@ class ScreenModule:
         pg.init()
         self.screen = pg.display.set_mode((self.width, self.height))
 
+    def update(self):
+        """
+        Updates events
+        """
+
+        for event in pg.event.get():
+            pass
