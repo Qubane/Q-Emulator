@@ -3,9 +3,10 @@ The main application class that is executed
 """
 
 
-from argparse import ArgumentParser, Namespace
+from source.modules import *
 from source.file_io import *
 from source.qt_emulator import QTEmulator
+from argparse import ArgumentParser, Namespace
 
 
 class Application:
@@ -53,9 +54,22 @@ class Application:
         else:
             raise Exception
 
+        # TODO: get rid of this temporary code
+        test = ScreenModule(64, 64, "RGB888")
+        test.init()
+
         emulator.initialize_memory()
         emulator.import_code(instruction_tuples)
-        emulator.run()
+        while emulator.exit_code != 0:
+            emulator.run()
+
+            if emulator.exit_code == 0x80:
+                self.module_interrupt()
 
         if self.args.dump:
             QTEmulatorIO.create_memory_dump(self.args.dump, emulator)
+
+    def module_interrupt(self):
+        """
+        Process any 0x80 interrupts
+        """
