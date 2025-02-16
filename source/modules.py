@@ -48,3 +48,10 @@ class ScreenModule:
 
         for event in pg.event.get():
             pass
+
+    def blit_array(self, array: ndarray[uint16], start: int):
+        """
+        Blits a slice of array to screen
+        :param array: cache array
+        :param start: slice start
+        """
