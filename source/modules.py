@@ -100,6 +100,17 @@ class ScreenModule:
         Blits a slice of array to screen in RGB565 color mode
         """
 
+        for y in range(self.height):
+            for x in range(self.width):
+                index = x + y * self.width
+                value = array[start + index]
+
+                red = value >> 11
+                green = (value >> 5) & 0b111111
+                blue = value & 0b11111
+
+                pg.draw.line(self.screen, (red, green, blue), (x, y), (x, y))
+
     def _blit_rgb888(self, array: ndarray, start: int):
         """
         Blits a slice of array to screen in RGB888 color mode
