@@ -55,3 +55,23 @@ class ScreenModule:
         :param array: cache array
         :param start: slice start
         """
+
+    def _blit_bw(self, array: ndarray[uint16], start: int):
+        """
+        Blits a slice of array to screen in BW color mode
+        """
+
+    def _blit_bw8(self, array: ndarray[uint16], start: int):
+        """
+        Blits a slice of array to screen in grayscale color mode
+        """
+
+    def _blit_rgb565(self, array: ndarray[uint16], start: int):
+        """
+        Blits a slice of array to screen in RGB565 color mode
+        """
+
+    def _blit_rgb888(self, array: ndarray[uint16], start: int):
+        """
+        Blits a slice of array to screen in RGB888 color mode
+        """
