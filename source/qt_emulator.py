@@ -124,9 +124,6 @@ class QTEmulator:
             # increment counter
             self.program_counter += 1
 
-        # after CPU was halted
-        print(f"Done after {self.instructions_executed} instructions;")
-
     def _set_flag_name(self, name: str, value: bool):
         """
         Set flag by name
