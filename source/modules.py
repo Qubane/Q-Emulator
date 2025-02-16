@@ -56,6 +56,7 @@ class ScreenModule:
         :param start: slice start
         """
 
+        self.screen.fill(0)  # clear display
         if self.color_mode is ColorMode.BW:         # black and white
             self._blit_bw(array, start)
         elif self.color_mode is ColorMode.BW8:      # grayscale
@@ -69,6 +70,16 @@ class ScreenModule:
         """
         Blits a slice of array to screen in BW color mode
         """
+
+        for bit_index in range(self.width * self.height):
+            color = array[start + (bit_index // 16)]  # programmers fault if this raises an error
+            x = bit_index % self.width
+            y = bit_index // self.width
+
+            if color & (1 << (bit_index % 16)) > 0:
+                pg.draw.line(self.screen, (255, 255, 255), (x, y), (x, y))
+            else:
+                pass
 
     def _blit_bw8(self, array: ndarray[uint16], start: int):
         """
