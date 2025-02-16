@@ -4,7 +4,15 @@ Interrupt called modules for emulator
 
 
 import pygame as pg
+from enum import IntEnum
 from numpy import ndarray, uint16
+
+
+class ColorMode(IntEnum):
+    BW = 1          # black and white
+    BW8 = 8         # 8 bit grayscale
+    RGB565 = 16     # 16 bit RGB565
+    RGB888 = 24     # 24 bit RGB
 
 
 class ScreenModule:
@@ -12,10 +20,16 @@ class ScreenModule:
     Screen module
     """
 
-    def __init__(self, width: int, height: int, color_depth: int):
+    def __init__(self, width: int, height: int, color_mode: str):
+        """
+        :param width: screen width
+        :param height: screen height
+        :param color_mode: color mode (BW, BW8, RGB565, RGB888)
+        """
+
         self.width: int = width
         self.height: int = height
-        self.color_depth: int = color_depth
+        self.color_mode: ColorMode = getattr(ColorMode, color_mode)
 
         self.screen: pg.Surface | None = None
 
