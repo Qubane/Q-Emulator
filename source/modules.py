@@ -115,3 +115,27 @@ class ScreenModule:
         """
         Blits a slice of array to screen in RGB888 color mode
         """
+
+        for y in range(self.height):
+            for x in range(self.width):
+                true_index = x + y * self.width
+                index = true_index * 2
+
+                if true_index % 2 == 0:
+                    # [RED | GREEN] [BLUE | ...]
+                    rg = array[start + index]
+                    b = array[start + index + 1]
+
+                    red = rg >> 8
+                    green = rg & 0xFF
+                    blue = b >> 8
+                else:
+                    # [... | RED] [GREEN | BLUE]
+                    r = array[start + index - 1]
+                    gb = array[start + index]
+
+                    red = r & 0xFF
+                    green = gb >> 8
+                    blue = gb & 0xFF
+
+                pg.draw.line(self.screen, (red, green, blue), (x, y), (x, y))
