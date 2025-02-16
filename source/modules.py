@@ -56,6 +56,15 @@ class ScreenModule:
         :param start: slice start
         """
 
+        if self.color_mode is ColorMode.BW:         # black and white
+            self._blit_bw(array, start)
+        elif self.color_mode is ColorMode.BW8:      # grayscale
+            self._blit_bw8(array, start)
+        elif self.color_mode is ColorMode.RGB565:   # rgb565
+            self._blit_rgb565(array, start)
+        elif self.color_mode is ColorMode.RGB888:   # rgb888
+            self._blit_rgb888(array, start)
+
     def _blit_bw(self, array: ndarray[uint16], start: int):
         """
         Blits a slice of array to screen in BW color mode
