@@ -5,7 +5,8 @@ Interrupt called modules for emulator
 
 import pygame as pg
 from enum import IntEnum
-from numpy import ndarray, uint16
+from numpy import ndarray
+from source.qt_emulator import QTEmulator
 
 
 class ColorMode(IntEnum):
@@ -19,6 +20,11 @@ class ModuleLinker:
     """
     Links emulator to modules
     """
+
+    def __init__(self, emulator):
+        self.emulator: QTEmulator = emulator
+
+        self.screen_module: ScreenModule | None = None
 
 
 class ScreenModule:
