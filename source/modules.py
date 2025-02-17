@@ -26,6 +26,39 @@ class ModuleLinker:
 
         self.screen_module: ScreenModule | None = None
 
+    def process_syscall(self):
+        """
+        Processes CPU syscall interrupts
+        """
+
+        # [MODULE INDEX] - port 0
+        # 1. screen
+        match self.emulator.ports[0]:
+            case 1:  # screen
+                self._process_screen()
+            case _:
+                pass
+
+    def _process_screen(self):
+        """
+        Processes any screen module related calls
+        """
+
+        # [WIDTH | HEIGHT] - port 1
+        width = self.emulator.ports[1] >> 8
+        height = self.emulator.ports[1] & 0xFF
+
+        # [MODE] - port 2
+        # 1. BW
+        # 8. BW8
+        # 16. RGB565
+        # 24. RGB888
+        mode = self.emulator.ports[2]
+
+        # [START] - port 3
+        # pointer to location in cache where screen data starts
+        start = self.emulator.ports[3]
+
 
 class ScreenModule:
     """
