@@ -62,6 +62,10 @@ class ModuleLinker:
         Processes any screen module related calls
         """
 
+        if self.screen_module is None:
+            self._init_screen_module()
+            return
+
         # [START] - port 1
         # pointer to location in cache where screen data starts
         start = self.emulator.ports[1]
