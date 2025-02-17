@@ -16,8 +16,7 @@ class Application:
 
     def __init__(self):
         self.args: Namespace | None = None
-
-        self.screen_module: ScreenModule | None = None
+        self.modlink: ModuleLinker | None = None
 
     def parse_args(self):
         """
@@ -56,49 +55,20 @@ class Application:
         else:
             raise Exception
 
+        # define module linker
+        self.modlink = ModuleLinker(emulator)
+
+        # main loop
         emulator.initialize_memory()
         emulator.import_code(instruction_tuples)
         while emulator.exit_code != 0:
             emulator.run()
 
             if emulator.exit_code == 0x80:
-                self.module_interrupt(emulator)
+                self.modlink.process_syscall()
 
         # after CPU was halted
         print(f"Done after {emulator.instructions_executed} instructions;")
 
         if self.args.dump:
             QTEmulatorIO.create_memory_dump(self.args.dump, emulator)
-
-    def module_interrupt(self, emulator: QTEmulator):
-        """
-        Process any 0x80 interrupts
-        """
-
-        # [MODULE INDEX] - port 0
-        # 1. screen
-        match emulator.ports[0]:
-            case 1:  # screen
-                self.process_screen(emulator)
-            case _:
-                pass
-
-    def process_screen(self, emulator: QTEmulator):
-        """
-        Processes any screen module related calls
-        """
-
-        # [WIDTH | HEIGHT] - port 1
-        width = emulator.ports[1] >> 8
-        height = emulator.ports[1] & 0xFF
-
-        # [MODE] - port 2
-        # 1. BW
-        # 8. BW8
-        # 16. RGB565
-        # 24. RGB888
-        mode = emulator.ports[2]
-
-        # [START] - port 3
-        # pointer to location in cache where screen data starts
-        start = emulator.ports[3]
