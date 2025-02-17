@@ -75,6 +75,8 @@ class Application:
         Process any 0x80 interrupts
         """
 
+        # [MODULE INDEX] - port 0
+        # 1. screen
         match emulator.ports[0]:
             case 1:  # screen
                 self.process_screen(emulator)
@@ -85,3 +87,18 @@ class Application:
         """
         Processes any screen module related calls
         """
+
+        # [WIDTH | HEIGHT] - port 1
+        width = emulator.ports[1] >> 8
+        height = emulator.ports[1] & 0xFF
+
+        # [MODE] - port 2
+        # 1. BW
+        # 8. BW8
+        # 16. RGB565
+        # 24. RGB888
+        mode = emulator.ports[2]
+
+        # [START] - port 3
+        # pointer to location in cache where screen data starts
+        start = emulator.ports[3]
