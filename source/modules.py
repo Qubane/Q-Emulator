@@ -15,6 +15,12 @@ class ColorMode(IntEnum):
     RGB888 = 24     # 24 bit RGB
 
 
+class ModuleLinker:
+    """
+    Links emulator to modules
+    """
+
+
 class ScreenModule:
     """
     Screen module
