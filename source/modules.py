@@ -39,9 +39,9 @@ class ModuleLinker:
             case _:
                 pass
 
-    def _process_screen(self):
+    def _init_screen_module(self):
         """
-        Processes any screen module related calls
+        Initializes screen module
         """
 
         # [WIDTH | HEIGHT] - port 1
@@ -55,9 +55,16 @@ class ModuleLinker:
         # 24. RGB888
         mode = self.emulator.ports[2]
 
-        # [START] - port 3
+        self.screen_module = ScreenModule(width, height, mode)
+
+    def _process_screen(self):
+        """
+        Processes any screen module related calls
+        """
+
+        # [START] - port 1
         # pointer to location in cache where screen data starts
-        start = self.emulator.ports[3]
+        start = self.emulator.ports[1]
 
 
 class ScreenModule:
