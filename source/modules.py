@@ -55,7 +55,19 @@ class ModuleLinker:
         # 24. RGB888
         mode = self.emulator.ports[2]
 
+        if mode == 1:
+            mode = "BW"
+        elif mode == 8:
+            mode = "BW8"
+        elif mode == 16:
+            mode = "RGB565"
+        elif mode == 24:
+            mode = "RGB888"
+        else:
+            mode = "BW8"
+
         self.screen_module = ScreenModule(width, height, mode)
+        self.screen_module.init()
 
     def _process_screen(self):
         """
