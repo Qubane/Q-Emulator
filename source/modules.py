@@ -92,6 +92,7 @@ class ModuleLinker:
         start = self.emulator.ports[1]
 
         self.screen_module.blit_array(self.emulator.cache, start)
+        self.screen_module.update()
 
 
 class ScreenModule:
@@ -110,7 +111,10 @@ class ScreenModule:
         self.height: int = height
         self.color_mode: ColorMode = getattr(ColorMode, color_mode)
 
-        self.screen: pg.Surface | None = None
+        self.running: bool = False
+
+        self._real_screen: pg.Surface | None = None
+        self.fake_screen: pg.Surface | None = None
 
     def init(self):
         """
@@ -118,7 +122,11 @@ class ScreenModule:
         """
 
         pg.init()
-        self.screen = pg.display.set_mode((self.width, self.height))
+        self._real_screen = pg.display.set_mode(
+            (self.width, self.height),
+            pg.HWSURFACE | pg.DOUBLEBUF | pg.RESIZABLE)
+        self.fake_screen = self._real_screen.copy()
+        self.running = True
 
     def stop(self):
         """
@@ -126,15 +134,19 @@ class ScreenModule:
         """
 
         pg.quit()
+        self.running = False
 
     def update(self):
         """
         Updates events
         """
 
-        pg.display.update()
+        pg.display.flip()
         for event in pg.event.get():
-            pass
+            if event.type == pg.VIDEORESIZE:
+                self._real_screen = pg.display.set_mode(
+                    size=event.size,
+                    flags=pg.HWSURFACE | pg.DOUBLEBUF | pg.RESIZABLE)
 
     def blit_array(self, array: ndarray, start: int):
         """
@@ -143,7 +155,7 @@ class ScreenModule:
         :param start: slice start
         """
 
-        self.screen.fill(0)  # clear display
+        self._real_screen.fill(0)  # clear display
         if self.color_mode is ColorMode.BW:         # black and white
             self._blit_bw(array, start)
         elif self.color_mode is ColorMode.BW8:      # grayscale
@@ -165,7 +177,7 @@ class ScreenModule:
                 value = array[start + index]
 
                 if value & (1 << (true_index % 16)) > 0:
-                    pg.draw.line(self.screen, (255, 255, 255), (x, y), (x, y))
+                    pg.draw.line(self._real_screen, (255, 255, 255), (x, y), (x, y))
                 else:
                     pass
 
@@ -179,7 +191,7 @@ class ScreenModule:
                 index = (x + y * self.width) // 2
                 value = array[start + index]
                 color = (value & (0xFF << (x % 2))) >> (x % 2)
-                pg.draw.line(self.screen, (color, color, color), (x, y), (x, y))
+                pg.draw.line(self._real_screen, (color, color, color), (x, y), (x, y))
 
     def _blit_rgb565(self, array: ndarray, start: int):
         """
@@ -195,7 +207,7 @@ class ScreenModule:
                 green = (value >> 5) & 0b111111
                 blue = value & 0b11111
 
-                pg.draw.line(self.screen, (red, green, blue), (x, y), (x, y))
+                pg.draw.line(self._real_screen, (red, green, blue), (x, y), (x, y))
 
     def _blit_rgb888(self, array: ndarray, start: int):
         """
@@ -224,4 +236,4 @@ class ScreenModule:
                     green = gb >> 8
                     blue = gb & 0xFF
 
-                pg.draw.line(self.screen, (red, green, blue), (x, y), (x, y))
+                pg.draw.line(self._real_screen, (red, green, blue), (x, y), (x, y))
