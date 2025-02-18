@@ -67,6 +67,9 @@ class Application:
             if emulator.exit_code == 0x80:
                 self.modlink.process_syscall()
 
+        # exit
+        self.modlink.exit()
+
         # after CPU was halted
         print(f"Done after {emulator.instructions_executed} instructions;")
 
