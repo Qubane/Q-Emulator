@@ -39,6 +39,14 @@ class ModuleLinker:
             case _:
                 pass
 
+    def exit(self):
+        """
+        Correctly stops modules
+        """
+
+        if self.screen_module:
+            self.screen_module.stop()
+
     def _init_screen_module(self):
         """
         Initializes screen module
@@ -111,6 +119,13 @@ class ScreenModule:
 
         pg.init()
         self.screen = pg.display.set_mode((self.width, self.height))
+
+    def stop(self):
+        """
+        Stops the screen module
+        """
+
+        pg.quit()
 
     def update(self):
         """
