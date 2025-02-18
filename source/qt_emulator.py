@@ -53,7 +53,7 @@ class QTEmulator:
         # misc fields
         self.instructions_executed: int = 0
         self.running: bool = False
-        self.exit_code: int = 0
+        self.exit_code: int = -1
 
         # instruction lookup table
         self._instruction_lookup: list[Callable] | None = None
@@ -511,7 +511,6 @@ class QTEmulator:
         """
 
         self.ports[value] = self.accumulator
-        print(self.accumulator, value)
 
     def _i097_portr(self, value: uint16):
         """
