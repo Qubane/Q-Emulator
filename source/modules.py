@@ -3,6 +3,7 @@ Interrupt called modules for emulator
 """
 
 
+import os
 import pygame as pg
 from enum import IntEnum
 from numpy import ndarray
@@ -121,11 +122,25 @@ class ScreenModule:
         init screen
         """
 
+        # make all windows be created in the center
+        os.environ['SDL_VIDEO_CENTERED'] = '1'
+
+        # init pygame
         pg.init()
-        self._real_screen = pg.display.set_mode(
-            (self.width, self.height),
-            pg.HWSURFACE | pg.DOUBLEBUF | pg.RESIZABLE)
+
+        # setup surfaces
+        flags = pg.HWSURFACE | pg.DOUBLEBUF | pg.NOFRAME | pg.RESIZABLE
+
+        # real displayed surface
+        self._real_screen = pg.display.set_mode(size=(self.width, self.height), flags=flags)
+
+        # fake surface with 32x32 resolution
         self.fake_screen = self._real_screen.copy()
+
+        # resize real surface so you could even see it
+        self._real_screen = pg.display.set_mode(size=(512, 512 * (self.width / self.height)), flags=flags)
+
+        # running to True
         self.running = True
 
     def stop(self):
@@ -141,12 +156,15 @@ class ScreenModule:
         Updates events
         """
 
+        # update image
+        self._real_screen.blit(
+            pg.transform.scale(self.fake_screen, self._real_screen.get_rect().size),
+            (0, 0))
         pg.display.flip()
+
+        # update events
         for event in pg.event.get():
-            if event.type == pg.VIDEORESIZE:
-                self._real_screen = pg.display.set_mode(
-                    size=event.size,
-                    flags=pg.HWSURFACE | pg.DOUBLEBUF | pg.RESIZABLE)
+            pass
 
     def blit_array(self, array: ndarray, start: int):
         """
@@ -155,7 +173,7 @@ class ScreenModule:
         :param start: slice start
         """
 
-        self._real_screen.fill(0)  # clear display
+        self.fake_screen.fill(0)  # clear display
         if self.color_mode is ColorMode.BW:         # black and white
             self._blit_bw(array, start)
         elif self.color_mode is ColorMode.BW8:      # grayscale
