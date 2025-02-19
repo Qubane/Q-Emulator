@@ -11,10 +11,24 @@ from source.qt_emulator import QTEmulator
 
 
 class ColorMode(IntEnum):
+    """
+    Color integer enum
+    """
+
     BW = 1          # black and white
     BW8 = 8         # 8 bit grayscale
     RGB565 = 16     # 16 bit RGB565
     RGB888 = 24     # 24 bit RGB
+
+
+class RGB565Correction:
+    """
+    Small correction values for RGB565
+    """
+
+    RGB565_R = 255 / (2 ** 5 - 1)
+    RGB565_G = 255 / (2 ** 6 - 1)
+    RGB565_B = 255 / (2 ** 5 - 1)
 
 
 class ModuleLinker:
@@ -221,9 +235,10 @@ class ScreenModule:
                 index = x + y * self.width
                 value = array[start + index]
 
-                red = value >> 11
-                green = (value >> 5) & 0b111111
-                blue = value & 0b11111
+                # values need to be corrected to be in range of 0 - 255
+                red = (value >> 11) * RGB565Correction.RGB565_R
+                green = ((value >> 5) & 0b111111) * RGB565Correction.RGB565_G
+                blue = (value & 0b11111) * RGB565Correction.RGB565_B
 
                 pg.draw.line(self.fake_screen, (red, green, blue), (x, y), (x, y))
 
@@ -250,6 +265,7 @@ class ScreenModule:
                     r = array[start + index - 1]
                     gb = array[start + index]
 
+                    # values already go from 0 to 255, no correction needed
                     red = r & 0xFF
                     green = gb >> 8
                     blue = gb & 0xFF
