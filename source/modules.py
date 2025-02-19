@@ -195,7 +195,7 @@ class ScreenModule:
                 value = array[start + index]
 
                 if value & (1 << (true_index % 16)) > 0:
-                    pg.draw.line(self._real_screen, (255, 255, 255), (x, y), (x, y))
+                    pg.draw.line(self.fake_screen, (255, 255, 255), (x, y), (x, y))
                 else:
                     pass
 
@@ -209,7 +209,7 @@ class ScreenModule:
                 index = (x + y * self.width) // 2
                 value = array[start + index]
                 color = (value & (0xFF << (x % 2))) >> (x % 2)
-                pg.draw.line(self._real_screen, (color, color, color), (x, y), (x, y))
+                pg.draw.line(self.fake_screen, (color, color, color), (x, y), (x, y))
 
     def _blit_rgb565(self, array: ndarray, start: int):
         """
@@ -225,7 +225,7 @@ class ScreenModule:
                 green = (value >> 5) & 0b111111
                 blue = value & 0b11111
 
-                pg.draw.line(self._real_screen, (red, green, blue), (x, y), (x, y))
+                pg.draw.line(self.fake_screen, (red, green, blue), (x, y), (x, y))
 
     def _blit_rgb888(self, array: ndarray, start: int):
         """
@@ -254,4 +254,4 @@ class ScreenModule:
                     green = gb >> 8
                     blue = gb & 0xFF
 
-                pg.draw.line(self._real_screen, (red, green, blue), (x, y), (x, y))
+                pg.draw.line(self.fake_screen, (red, green, blue), (x, y), (x, y))
