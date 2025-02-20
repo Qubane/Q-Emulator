@@ -4,9 +4,9 @@ Interrupt called modules for emulator
 
 
 import os
+import numpy as np
 import pygame as pg
 from enum import IntEnum
-from numpy import ndarray
 from source.qt_emulator import QTEmulator
 
 
@@ -180,7 +180,7 @@ class ScreenModule:
         for event in pg.event.get():
             pass
 
-    def blit_array(self, array: ndarray, start: int):
+    def blit_array(self, array: np.ndarray, start: int):
         """
         Blits a slice of array to screen
         :param array: cache array
@@ -197,7 +197,7 @@ class ScreenModule:
         elif self.color_mode is ColorMode.RGB888:   # rgb888
             self._blit_rgb888(array, start)
 
-    def _blit_bw(self, array: ndarray, start: int):
+    def _blit_bw(self, array: np.ndarray, start: int):
         """
         Blits a slice of array to screen in BW color mode
         """
@@ -213,7 +213,7 @@ class ScreenModule:
                 else:
                     pass
 
-    def _blit_bw8(self, array: ndarray, start: int):
+    def _blit_bw8(self, array: np.ndarray, start: int):
         """
         Blits a slice of array to screen in grayscale color mode
         """
@@ -225,24 +225,22 @@ class ScreenModule:
                 color = (value & (0xFF << (x % 2))) >> (x % 2)
                 pg.draw.line(self.fake_screen, (color, color, color), (x, y), (x, y))
 
-    def _blit_rgb565(self, array: ndarray, start: int):
+    def _blit_rgb565(self, array: np.ndarray, start: int):
         """
         Blits a slice of array to screen in RGB565 color mode
         """
 
-        for y in range(self.height):
-            for x in range(self.width):
-                index = x + y * self.width
-                value = array[start + index]
+        color_data = array[start:start + self.width * self.height]
 
-                # values need to be corrected to be in range of 0 - 255
-                red = (value >> 11) * RGB565Correction.RGB565_R
-                green = ((value >> 5) & 0b111111) * RGB565Correction.RGB565_G
-                blue = (value & 0b11111) * RGB565Correction.RGB565_B
+        # values need to be corrected to be in range of 0 - 255
+        red = ((color_data >> 11) * RGB565Correction.RGB565_R).astype(np.uint8)
+        green = (((color_data >> 5) & 0b111111) * RGB565Correction.RGB565_G).astype(np.uint8)
+        blue = ((color_data & 0b11111) * RGB565Correction.RGB565_B).astype(np.uint8)
 
-                pg.draw.line(self.fake_screen, (red, green, blue), (x, y), (x, y))
+        image = pg.image.frombuffer(np.column_stack((red, green, blue)), (self.width, self.height), "RGB")
+        self.fake_screen.blit(image, (0, 0))
 
-    def _blit_rgb888(self, array: ndarray, start: int):
+    def _blit_rgb888(self, array: np.ndarray, start: int):
         """
         Blits a slice of array to screen in RGB888 color mode
         """
