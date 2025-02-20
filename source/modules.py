@@ -143,7 +143,7 @@ class ScreenModule:
         pg.init()
 
         # setup surfaces
-        flags = pg.HWSURFACE | pg.DOUBLEBUF | pg.NOFRAME | pg.RESIZABLE
+        flags = pg.HWSURFACE | pg.DOUBLEBUF | pg.RESIZABLE
 
         # real displayed surface
         self._real_screen = pg.display.set_mode(size=(self.width, self.height), flags=flags)
