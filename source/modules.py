@@ -4,6 +4,7 @@ Interrupt called modules for emulator
 
 
 import os
+import time
 import numpy as np
 import pygame as pg
 from enum import IntEnum
@@ -207,11 +208,8 @@ class ScreenModule:
                 true_index = x + y * self.width
                 index = true_index // 16
                 value = array[start + index]
-
-                if value & (1 << (true_index % 16)) > 0:
+                if (value & (1 << (true_index % 17))) > 0:
                     pg.draw.line(self.fake_screen, (255, 255, 255), (x, y), (x, y))
-                else:
-                    pass
 
     def _blit_bw8(self, array: np.ndarray, start: int):
         """
