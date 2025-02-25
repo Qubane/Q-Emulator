@@ -110,6 +110,10 @@ class ModuleLinker:
         self.screen_module.blit_array(self.emulator.cache, start)
         self.screen_module.update()
 
+        if not self.screen_module.running:
+            self.emulator.exit_code = 0
+            self.emulator.running = False
+
 
 class ScreenModule:
     """
@@ -179,7 +183,8 @@ class ScreenModule:
 
         # update events
         for event in pg.event.get():
-            pass
+            if event.type == pg.QUIT:
+                self.running = False
 
     def blit_array(self, array: np.ndarray, start: int):
         """
