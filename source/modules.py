@@ -51,6 +51,7 @@ class ModuleLinker:
         # 1. screen
         match self.emulator.ports[0]:
             case 1:  # screen
+                self.emulator.running = True
                 self._process_screen()
             case _:
                 pass
@@ -61,7 +62,7 @@ class ModuleLinker:
         """
 
         if self.screen_module:
-            self.screen_module.stop()
+            self.screen_module.quit()
 
     def _init_screen_module(self):
         """
@@ -162,7 +163,7 @@ class ScreenModule:
         # running to True
         self.running = True
 
-    def stop(self):
+    def quit(self):
         """
         Stops the screen module
         """
@@ -184,7 +185,7 @@ class ScreenModule:
         # update events
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                self.running = False
+                self.quit()
 
     def blit_array(self, array: np.ndarray, start: int):
         """

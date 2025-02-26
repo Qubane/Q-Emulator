@@ -61,7 +61,8 @@ class Application:
         # main loop
         emulator.initialize_memory()
         emulator.import_code(instruction_tuples)
-        while emulator.exit_code != 0:
+        emulator.running = True
+        while emulator.running:
             emulator.run()
 
             if emulator.exit_code == 0x80:
@@ -75,3 +76,5 @@ class Application:
 
         if self.args.dump:
             QTEmulatorIO.create_memory_dump(self.args.dump, emulator)
+
+        exit(emulator.exit_code)
